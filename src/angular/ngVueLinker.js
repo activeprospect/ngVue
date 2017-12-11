@@ -22,11 +22,18 @@ export function ngVueLinker (componentName, jqElement, elAttributes, scope, $inj
   }
   watchPropExprs(dataExprsMap, reactiveData, watchOptions, scope)
 
+  const on = {}
+  if (dataExprsMap.events && Object.keys(dataExprsMap.events).length) {
+    Object.keys(dataExprsMap.events).forEach(e => {
+      on[e] = scope.$eval(dataExprsMap.events[e])
+    })
+  }
+
   const vueInstance = new Vue({
     el: jqElement[0],
     data: reactiveData,
     render (h) {
-      return <Component {...{ directives }} {...{ props: reactiveData._v }} />
+      return <Component {...{ directives }} {...{ props: reactiveData._v, on }} />
     },
     ...vueHooks
   })

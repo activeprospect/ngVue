@@ -9,9 +9,10 @@ import extractExpressionName from './extractPropName'
  *
  * @returns {Object|string|null}
  */
+
 export function extractExpressions (exprType, attributes) {
-  const objectExprKey = exprType === 'props' ? 'vprops' : 'vdata'
-  const objectPropExprRegExp = exprType === 'props' ? /vprops/i : /vdata/i
+  const objectExprKey = 'v' + exprType[0].toUpperCase() + exprType.slice(1)
+  const objectPropExprRegExp = new RegExp(objectExprKey, 'i')
 
   const objectExpr = attributes[objectExprKey]
 
@@ -42,6 +43,7 @@ export function extractExpressions (exprType, attributes) {
 export default function getExpressions (attributes) {
   return {
     data: extractExpressions('data', attributes),
-    props: extractExpressions('props', attributes)
+    bind: extractExpressions('props', attributes),
+    events: extractExpressions('on', attributes)
   }
 }
