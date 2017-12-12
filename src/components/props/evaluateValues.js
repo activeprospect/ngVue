@@ -8,7 +8,7 @@ import angular from 'angular'
  * @returns {string|Object|null}
  */
 export default function evaluateValues (dataExprsMap, scope) {
-  const key = dataExprsMap.props ? 'props' : 'data'
+  const key = dataExprsMap.bind ? 'bind' : 'data'
   const expr = dataExprsMap[key]
 
   if (!expr) {

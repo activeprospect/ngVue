@@ -52,7 +52,7 @@ function notify (setter, inQuirkMode) {
  * @param scope Object
  */
 export default function watchExpressions (dataExprsMap, reactiveData, options, scope) {
-  const expressions = dataExprsMap.props ? dataExprsMap.props : dataExprsMap.data
+  const expressions = dataExprsMap.bind ? dataExprsMap.bind : dataExprsMap.data
 
   if (!expressions) {
     return

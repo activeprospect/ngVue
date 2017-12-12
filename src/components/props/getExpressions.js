@@ -43,7 +43,7 @@ export function extractExpressions (exprType, attributes) {
 export default function getExpressions (attributes) {
   return {
     data: extractExpressions('data', attributes),
-    props: extractExpressions('bind', attributes),
+    bind: extractExpressions('bind', attributes),
     events: extractExpressions('on', attributes)
   }
 }
