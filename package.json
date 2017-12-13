@@ -3,7 +3,7 @@
   "author": "Doray Hong <hongduhui@gmail.com>",
   "version": "0.4.5",
   "description": "Use Vue Components in Angular 1.x",
-  "main": "build/index.js",
+  "main": "src/index.js",
   "keywords": [
     "javascript",
     "migration",
