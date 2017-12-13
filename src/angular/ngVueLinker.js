@@ -29,14 +29,13 @@ export function ngVueLinker (componentName, jqElement, elAttributes, scope, $inj
     })
   }
 
-  const vueInstance = new Vue({
+  const vueInstance = new Vue(Object.assign({}, vueHooks, {
     el: jqElement[0],
     data: reactiveData,
     render (h) {
       return <Component {...{ directives }} {...{ props: reactiveData._v, on }} />
     },
-    ...vueHooks
-  })
+  }))
 
   scope.$on('$destroy', () => {
     vueInstance.$destroy()
