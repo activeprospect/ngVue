@@ -1,8 +1,9 @@
-import angular from 'angular'
+import angular from 'angular';
 
 export default function getVueComponent (name, $injector) {
-  if (angular.isFunction(name)) {
-    return name
+  if (typeof name === 'string') {
+    return $injector.get(name);
+  } else {
+    return name;
   }
-  return $injector.get(name)
 }
