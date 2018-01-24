@@ -8,6 +8,7 @@ import evaluateDirectives from '../directives/evaluateDirectives'
 export function ngVueLinker (componentName, jqElement, elAttributes, scope, $injector) {
   const $ngVue = $injector.has('$ngVue') ? $injector.get('$ngVue') : null
 
+  const config = $ngVue.config || {};
   const dataExprsMap = getPropExprs(elAttributes)
   const Component = getVueComponent(componentName, $injector)
   const directives = evaluateDirectives(elAttributes, scope) || []
@@ -29,7 +30,7 @@ export function ngVueLinker (componentName, jqElement, elAttributes, scope, $inj
     })
   }
 
-  const vueInstance = new Vue(Object.assign({}, vueHooks, {
+  const vueInstance = new Vue(Object.assign({}, vueHooks, config, {
     el: jqElement[0],
     data: reactiveData,
     render (h) {
