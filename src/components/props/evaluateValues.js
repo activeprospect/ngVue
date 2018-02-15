@@ -7,22 +7,23 @@ import angular from 'angular'
  * @param scope Object
  * @returns {string|Object|null}
  */
-export default function evaluateValues (dataExprsMap, scope) {
-  const key = dataExprsMap.bind ? 'bind' : 'data'
-  const expr = dataExprsMap[key]
-
-  if (!expr) {
-    return null
-  }
-
-  if (angular.isString(expr)) {
-    return scope.$eval(expr)
-  }
-
+export default function evaluateValues (dataExprsMap, scope, types = ['bind', 'data']) {
   const evaluatedValues = {}
-  Object.keys(expr).forEach((key) => {
-    evaluatedValues[key] = scope.$eval(expr[key])
-  })
+  types.forEach( key => {
+    const expr = dataExprsMap[key]
+
+    if (!expr) {
+      return null
+    }
+
+    if (angular.isString(expr)) {
+      return key == 'bind' ? scope.$eval(expr) : expr;
+    }
+
+    Object.keys(expr).forEach((key) => {
+      evaluatedValues[key] = key == 'bind' ? scope.$eval(expr[key]) : expr[key];
+    })
+  });
 
   return evaluatedValues
 }

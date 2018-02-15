@@ -10,7 +10,7 @@ import extractExpressionName from './extractPropName'
  * @returns {Object|string|null}
  */
 
-export function extractExpressions (exprType, attributes) {
+export function extractExpressions (exprType, alternate, attributes) {
   const objectExprKey = 'v' + exprType[0].toUpperCase() + exprType.slice(1)
   const objectPropExprRegExp = new RegExp(objectExprKey, 'i')
 
@@ -22,6 +22,8 @@ export function extractExpressions (exprType, attributes) {
 
   const expressions = Object.keys(attributes)
     .filter((attr) => objectPropExprRegExp.test(attr))
+    .concat(Object.keys(attributes.$attr).filter((key) => attributes.$attr[key].search(alternate) == 0));
+
 
   if (expressions.length === 0) {
     return null
@@ -29,8 +31,8 @@ export function extractExpressions (exprType, attributes) {
 
   const exprsMap = {/* name : expression */}
   expressions.forEach((attrExprName) => {
-    const exprName = extractExpressionName(attrExprName, objectExprKey)
-    exprsMap[exprName] = attributes[attrExprName]
+    const exprName = attrExprName.replace(new RegExp('^' + exprType), '').replace(alternate, '');
+    exprsMap[exprName || attrExprName] = attributes[attrExprName]
   })
 
   return exprsMap
@@ -42,8 +44,8 @@ export function extractExpressions (exprType, attributes) {
  */
 export default function getExpressions (attributes) {
   return {
-    data: extractExpressions('data', attributes),
-    bind: extractExpressions('bind', attributes),
-    events: extractExpressions('on', attributes)
+    data: extractExpressions('data', /^(?=[^:@])/, attributes),
+    bind: extractExpressions('bind', /^:/, attributes),
+    events: extractExpressions('on', /^@/, attributes)
   }
 }
