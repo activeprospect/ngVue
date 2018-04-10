@@ -9,19 +9,19 @@ import angular from 'angular'
  */
 export default function evaluateValues (dataExprsMap, scope, types = ['bind', 'data']) {
   const evaluatedValues = {}
-  types.forEach( key => {
-    const expr = dataExprsMap[key]
+  types.forEach( type => {
+    const expr = dataExprsMap[type]
 
     if (!expr) {
       return null
     }
 
     if (angular.isString(expr)) {
-      return key == 'bind' ? scope.$eval(expr) : expr;
+      return type == 'bind' ? scope.$eval(expr) : expr;
     }
 
     Object.keys(expr).forEach((key) => {
-      evaluatedValues[key] = key == 'bind' ? scope.$eval(expr[key]) : expr[key];
+      evaluatedValues[key] = type == 'bind' ? scope.$eval(expr[key]) : expr[key];
     })
   });
 
