@@ -32,7 +32,7 @@ export function ngVueLinker (componentName, jqElement, elAttributes, scope, $inj
     })
   }
 
-  const allData = Object.assign({}, reactiveData._v, normalData._v );
+  const allData = Object.assign(reactiveData._v, normalData._v );
   const html = $interpolate(jqElement[0].innerHTML)(scope);
 
   const vueInstance = new Vue(Object.assign({}, vueHooks, config, {
