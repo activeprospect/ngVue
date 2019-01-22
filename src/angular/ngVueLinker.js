@@ -7,9 +7,9 @@ import evaluateDirectives from '../directives/evaluateDirectives'
 
 export function ngVueLinker (componentName, jqElement, elAttributes, scope, $injector) {
   const $ngVue = $injector.has('$ngVue') ? $injector.get('$ngVue') : null
-  const $interpolate = $injector.get('$interpolate');
+  const $interpolate = $injector.get('$interpolate')
 
-  const config = ($ngVue || {}).config || {};
+  const config = ($ngVue || {}).config || {}
   const dataExprsMap = getPropExprs(elAttributes)
   const Component = getVueComponent(componentName, $injector)
   const directives = evaluateDirectives(elAttributes, scope) || []
@@ -32,8 +32,8 @@ export function ngVueLinker (componentName, jqElement, elAttributes, scope, $inj
     })
   }
 
-  const allData = Object.assign(reactiveData._v, normalData._v );
-  const html = $interpolate(jqElement[0].innerHTML)(scope);
+  const allData = Object.assign(reactiveData._v, normalData._v)
+  const html = $interpolate(jqElement[0].innerHTML)(scope)
 
   const vueInstance = new Vue(Object.assign({}, vueHooks, config, {
     el: jqElement[0],
@@ -41,7 +41,7 @@ export function ngVueLinker (componentName, jqElement, elAttributes, scope, $inj
     render (h) {
       return <Component {...{ directives, props: allData, on }}>
       { html ? <span domPropsInnerHTML={ html }/> : '' }</Component>
-    },
+    }
   }))
 
   scope.$on('$destroy', () => {

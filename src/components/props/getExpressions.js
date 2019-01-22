@@ -1,5 +1,4 @@
 import angular from 'angular'
-import extractExpressionName from './extractPropName'
 
 /**
  * Extract the property/data expressions from the element attribute.
@@ -22,8 +21,7 @@ export function extractExpressions (exprType, alternate, attributes) {
 
   const expressions = Object.keys(attributes)
     .filter((attr) => objectPropExprRegExp.test(attr))
-    .concat(Object.keys(attributes.$attr).filter((key) => attributes.$attr[key].search(alternate) == 0));
-
+    .concat(Object.keys(attributes.$attr).filter((key) => attributes.$attr[key].search(alternate) === 0))
 
   if (expressions.length === 0) {
     return null
@@ -31,7 +29,7 @@ export function extractExpressions (exprType, alternate, attributes) {
 
   const exprsMap = {/* name : expression */}
   expressions.forEach((attrExprName) => {
-    const exprName = attrExprName.replace(new RegExp('^' + exprType), '').replace(alternate, '');
+    const exprName = attrExprName.replace(new RegExp('^' + exprType), '').replace(alternate, '')
     exprsMap[exprName || attrExprName] = attributes[attrExprName]
   })
 

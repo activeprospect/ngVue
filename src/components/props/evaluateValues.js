@@ -9,7 +9,7 @@ import angular from 'angular'
  */
 export default function evaluateValues (dataExprsMap, scope, types = ['bind', 'data']) {
   const evaluatedValues = {}
-  types.forEach( type => {
+  types.forEach(type => {
     const expr = dataExprsMap[type]
 
     if (!expr) {
@@ -17,13 +17,13 @@ export default function evaluateValues (dataExprsMap, scope, types = ['bind', 'd
     }
 
     if (angular.isString(expr)) {
-      return type == 'bind' ? scope.$eval(expr) : expr;
+      return type === 'bind' ? scope.$eval(expr) : expr
     }
 
     Object.keys(expr).forEach((key) => {
-      evaluatedValues[key] = type == 'bind' ? scope.$eval(expr[key]) : expr[key];
+      evaluatedValues[key] = type === 'bind' ? scope.$eval(expr[key]) : expr[key]
     })
-  });
+  })
 
   return evaluatedValues
 }
