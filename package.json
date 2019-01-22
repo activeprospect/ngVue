@@ -20,7 +20,6 @@
     "bundle": "./scripts/bundle.sh",
     "lint": "eslint src lib test example",
     "build": "npm run clean && npm run bundle",
-    "preversion": "npm run test",
     "prepublish": "npm run build"
   },
   "dependencies": {},
