@@ -1,9 +1,9 @@
 {
-  "name": "ngVue",
+  "name": "@activeprospect/ngvue",
   "author": "Doray Hong <hongduhui@gmail.com>",
   "version": "0.4.5",
   "description": "Use Vue Components in Angular 1.x",
-  "main": "src/index.js",
+  "main": "build/index.js",
   "keywords": [
     "javascript",
     "migration",
@@ -62,12 +62,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ngVue/ngVue.git"
+    "url": "git+https://github.com/activeprospect/ngVue.git"
   },
   "bugs": {
-    "url": "https://github.com/ngVue/ngVue/issues"
+    "url": "https://github.com/activeprospect/ngVue/issues"
   },
-  "homepage": "https://github.com/ngVue/ngVue#readme",
+  "homepage": "https://github.com/activeprospect/ngVue#readme",
   "license": "MIT",
   "jest": {
     "rootDir": "",
