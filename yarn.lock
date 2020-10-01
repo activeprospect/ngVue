@@ -78,9 +78,9 @@ angular-mocks@^1.6.4:
   version "1.6.4"
   resolved "https://registry.yarnpkg.com/angular-mocks/-/angular-mocks-1.6.4.tgz#47fdf50921cf24fb489f100a8cf2ad99d0538f40"
 
-angular@^1.6.8:
-  version "1.6.8"
-  resolved "https://registry.yarnpkg.com/angular/-/angular-1.6.8.tgz#5be378a58be91a5489e78b59c4518cd9fd273ffb"
+angular@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/angular/-/angular-1.8.0.tgz#b1ec179887869215cab6dfd0df2e42caa65b1b51"
 
 ansi-escapes@^1.1.0, ansi-escapes@^1.4.0:
   version "1.4.0"
