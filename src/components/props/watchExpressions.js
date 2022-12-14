@@ -5,14 +5,14 @@ function watch (expressions, reactiveData) {
   return (watchFunc) => {
     // for `vprops` / `vdata`
     if (isString(expressions)) {
-      watchFunc(expressions, Vue.set.bind(Vue, reactiveData, '_v'))
+      watchFunc(expressions, v => reactiveData._v = v))
       return
     }
 
     // for `vprops-something`
     Object.keys(expressions)
       .forEach((name) => {
-        watchFunc(expressions[name], Vue.set.bind(Vue, reactiveData._v, name))
+        watchFunc(expressions[name], v => reactiveData._v[name] = v))
       })
   }
 }

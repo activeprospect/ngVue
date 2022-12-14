@@ -1,3 +1,4 @@
+import { reactive } from 'vue'
 import Vue from 'vue'
 import getVueComponent from '../components/getVueComponent'
 import getPropExprs from '../components/props/getExpressions'
@@ -13,7 +14,7 @@ export function ngVueLinker (componentName, jqElement, elAttributes, scope, $inj
   const dataExprsMap = getPropExprs(elAttributes)
   const Component = getVueComponent(componentName, $injector)
   const directives = evaluateDirectives(elAttributes, scope) || []
-  const reactiveData = { _v: evalPropValues(dataExprsMap, scope, ['bind']) || {} }
+  const reactiveData = reactive({ _v: evalPropValues(dataExprsMap, scope, ['bind']) || {} })
   const normalData = { _v: evalPropValues(dataExprsMap, scope, ['data']) || {} }
 
   const inQuirkMode = $ngVue ? $ngVue.inQuirkMode() : false
