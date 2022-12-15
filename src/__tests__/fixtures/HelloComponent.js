@@ -1,11 +1,12 @@
-import Vue from 'vue'
+import { h, defineComponent } from 'vue'
 
-export default Vue.component('hello-component', {
+export default defineComponent({
+  name: 'hello-component',
   props: {
     firstName: String,
     lastName: String
   },
-  render (h) {
-    return (<span>Hello {this.firstName} {this.lastName}</span>)
+  render () {
+    return h('span', `Hello ${this.firstName || ''} ${this.lastName || ''}`);
   }
 })

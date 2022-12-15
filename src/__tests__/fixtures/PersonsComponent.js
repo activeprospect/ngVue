@@ -1,14 +1,18 @@
-import Vue from 'vue'
+import { h, defineComponent } from 'vue'
 
-export default Vue.component('persons-component', {
+export default defineComponent({
+  name: 'persons-component',
   props: {
-    persons: Array
+    persons: {
+      type: Array,
+      default: () => []
+    }
   },
-  render (h) {
-    return (
-      <ul>
-        {this.persons.map(p => <li>{p.firstName} {p.lastName}</li>)}
-      </ul>
+  render (c) {
+    return h('ul',
+      this.persons.map(p => {
+        return h('li', `${p.firstName} ${p.lastName}`);
+      })
     )
   }
 })

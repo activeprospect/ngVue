@@ -1,5 +1,6 @@
 import angular from 'angular'
 import Vue from 'vue'
+import { reactive } from 'vue';
 
 import ngHtmlCompiler from './utils/ngHtmlCompiler'
 
@@ -46,8 +47,8 @@ describe('create-vue-component', () => {
       scope.person = { firstName: 'John', lastName: 'Doe' }
       const elem = compileHTML(
         `<hello
-          v-bind-first-name="person.firstName"
-          v-bind-last-name="person.lastName" />`,
+          :first-name="person.firstName"
+          :last-name="person.lastName" />`,
         scope
       )
       expect(elem[0].innerHTML).toBe('<span>Hello John Doe</span>')
@@ -62,12 +63,12 @@ describe('create-vue-component', () => {
 
     it('should re-render the vue component when v-bind value changes', (done) => {
       const scope = $rootScope.$new()
-      scope.person = { firstName: 'John', lastName: 'Doe' }
+      scope.person = reactive({ firstName: 'John', lastName: 'Doe' })
       const elem = compileHTML('<hello v-bind="person" />', scope)
 
       scope.person.firstName = 'Jane'
       scope.person.lastName = 'Smith'
-      Vue.nextTick(() => {
+      process.nextTick(() => {
         expect(elem[0].innerHTML).toBe('<span>Hello Jane Smith</span>')
         done()
       })
@@ -80,7 +81,7 @@ describe('create-vue-component', () => {
 
       scope.person = { firstName: 'Jane', lastName: 'Smith' }
       scope.$digest()
-      Vue.nextTick(() => {
+      process.nextTick(() => {
         expect(elem[0].innerHTML).toBe('<span>Hello Jane Smith</span>')
         done()
       })
@@ -91,15 +92,15 @@ describe('create-vue-component', () => {
       scope.person = { firstName: 'John', lastName: 'Doe' }
       const elem = compileHTML(
         `<hello
-          v-bind-first-name="person.firstName"
-          v-bind-last-name="person.lastName" />`,
+          :first-name="person.firstName"
+          :last-name="person.lastName" />`,
         scope
       )
 
       scope.person.firstName = 'Jane'
       scope.person.lastName = 'Smith'
       scope.$digest()
-      Vue.nextTick(() => {
+      process.nextTick(() => {
         expect(elem[0].innerHTML).toBe('<span>Hello Jane Smith</span>')
         done()
       })
@@ -110,14 +111,14 @@ describe('create-vue-component', () => {
       scope.person = { firstName: 'John', lastName: 'Doe' }
       const elem = compileHTML(
         `<hello
-          v-bind-first-name="person.firstName"
-          v-bind-last-name="person.lastName" />`,
+          :first-name="person.firstName"
+          :last-name="person.lastName" />`,
         scope
       )
 
       scope.person = { firstName: 'Jane', lastName: 'Smith' }
       scope.$digest()
-      Vue.nextTick(() => {
+      process.nextTick(() => {
         expect(elem[0].innerHTML).toBe('<span>Hello Jane Smith</span>')
         done()
       })
@@ -125,19 +126,19 @@ describe('create-vue-component', () => {
 
     it('should re-render the vue component when v-bind-name is an array and its items change', (done) => {
       const scope = $rootScope.$new()
-      scope.persons = [
+      scope.persons = reactive([
         { firstName: 'John', lastName: 'Doe' },
         { firstName: 'Jane', lastName: 'Doe' }
-      ]
-      const elem = compileHTML(`<persons v-bind-persons="persons" />`, scope)
+      ])
+      const elem = compileHTML(`<persons :persons="persons" />`, scope)
 
       // use Array.prototype.splice
       scope.persons.splice(0, 1, { firstName: 'John', lastName: 'Smith' })
       // use Vue.set
-      Vue.set(scope.persons, 1, { firstName: 'Jane', lastName: 'Smith' })
+      scope.persons[1] = { firstName: 'Jane', lastName: 'Smith' };
 
       scope.$digest()
-      Vue.nextTick(() => {
+      process.nextTick(() => {
         expect(elem[0].innerHTML).toBe('<ul><li>John Smith</li><li>Jane Smith</li></ul>')
         done()
       })

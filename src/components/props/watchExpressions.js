@@ -1,18 +1,17 @@
 import {isString, isArray, isObject} from 'angular'
-import Vue from 'vue'
 
 function watch (expressions, reactiveData) {
   return (watchFunc) => {
     // for `vprops` / `vdata`
     if (isString(expressions)) {
-      watchFunc(expressions, v => reactiveData._v = v)
+      watchFunc(expressions, v => Object.keys(v).forEach(k => reactiveData[k] = v[k]))
       return
     }
 
     // for `vprops-something`
     Object.keys(expressions)
       .forEach((name) => {
-        watchFunc(expressions[name], v => reactiveData._v[name] = v)
+        watchFunc(expressions[name], v => reactiveData[name] = v)
       })
   }
 }

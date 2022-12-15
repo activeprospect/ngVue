@@ -20,8 +20,8 @@ export function extractExpressions (exprType, alternate, attributes) {
   }
 
   const expressions = Object.keys(attributes)
-    .filter((attr) => objectPropExprRegExp.test(attr))
-    .concat(Object.keys(attributes.$attr).filter((key) => attributes.$attr[key].search(alternate) === 0))
+    .filter((attr) => objectPropExprRegExp.test(attr) && attr.indexOf('ng') !== 0)
+    .concat(Object.keys(attributes.$attr).filter((key) => attributes.$attr[key].search(alternate) === 0 && attributes.$attr[key].search(/(v-bind|ng-)/) === -1))
 
   if (expressions.length === 0) {
     return null
