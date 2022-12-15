@@ -1,4 +1,4 @@
-import babel from 'rollup-plugin-babel'
+import babel from '@rollup/plugin-babel'
 import nodeResolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 import uglify from 'rollup-plugin-uglify'
@@ -9,9 +9,16 @@ const output = process.env.OUTPUT
 const minified = process.env.MIN === 'true'
 
 export default {
-  entry: `src/${entry}.js`,
-  moduleName: 'ngVue',
-  moduleId: 'ngVue',
+  input: `src/${entry}.js`,
+  output: {
+    file: `build/${output}.js`,
+    name: 'ngVue',
+    globals: {
+      vue: 'Vue',
+      angular: 'angular'
+    },
+    format: 'umd'
+  },
   plugins: [
     nodeResolve({
       browser: true
@@ -29,12 +36,5 @@ export default {
       mangle: false
     }, minify)
   ],
-  globals: {
-    vue: 'Vue',
-    angular: 'angular'
-  },
-  external: ['vue', 'angular'],
-  targets: [
-    { dest: `build/${output}.js`, format: 'umd' }
-  ]
+  external: ['vue', 'angular']
 }
