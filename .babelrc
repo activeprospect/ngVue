@@ -1,14 +1,28 @@
 {
   "env": {
     "dev": {
-      "presets": [["es2015", { "modules": false }], "stage-1"]
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "modules": false
+          }
+        ]
+      ]
     },
     "build": {
-      "presets": ["es2015-rollup", "stage-1"]
+      "presets": [
+        "@babel/preset-env"
+      ]
     },
     "test": {
-      "presets": ["es2015", "stage-1", "vue"]
+      "presets": [
+        "@babel/preset-env",
+        "vue"
+      ]
     }
   },
-  "plugins": ["transform-vue-jsx"]
+  "plugins": [
+    "transform-vue-jsx"
+  ]
 }

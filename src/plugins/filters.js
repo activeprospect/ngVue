@@ -43,7 +43,9 @@ const ngFilters = (Vue) => {
 // initialize all the ng filters and install the ngFilters plugin
 const onPluginInit = ($injector, Vue) => {
   resolveStringFilters($injector)
-  Vue.use(ngFilters)
+  // Vue 3 doesn't support .use this way.
+  // TODO: revisit if we need filters. Let's not.
+  //Vue.use(ngFilters)
 }
 
 export default angular.module('ngVue.plugins')

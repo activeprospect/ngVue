@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { h, reactive, createApp } from 'vue'
 import getVueComponent from '../components/getVueComponent'
 import getPropExprs from '../components/props/getExpressions'
 import watchPropExprs from '../components/props/watchExpressions'
@@ -13,8 +13,8 @@ export function ngVueLinker (componentName, jqElement, elAttributes, scope, $inj
   const dataExprsMap = getPropExprs(elAttributes)
   const Component = getVueComponent(componentName, $injector)
   const directives = evaluateDirectives(elAttributes, scope) || []
-  const reactiveData = { _v: evalPropValues(dataExprsMap, scope, ['bind']) || {} }
-  const normalData = { _v: evalPropValues(dataExprsMap, scope, ['data']) || {} }
+  let reactiveData = reactive(evalPropValues(dataExprsMap, scope, ['bind']) || {})
+  const normalData = evalPropValues(dataExprsMap, scope, ['data']) || {}
 
   const inQuirkMode = $ngVue ? $ngVue.inQuirkMode() : false
   const vueHooks = $ngVue ? $ngVue.getVueHooks() : {}
@@ -23,31 +23,36 @@ export function ngVueLinker (componentName, jqElement, elAttributes, scope, $inj
     depth: elAttributes.watchDepth,
     quirk: inQuirkMode
   }
+
+
   watchPropExprs(dataExprsMap, reactiveData, watchOptions, scope)
 
   const on = {}
   if (dataExprsMap.events && Object.keys(dataExprsMap.events).length) {
     Object.keys(dataExprsMap.events).forEach(e => {
-      on[e] = scope.$eval(dataExprsMap.events[e])
+      on['on' + e[0].toUpperCase() + e.slice(1)] = scope.$eval(dataExprsMap.events[e])
     })
   }
 
-  const allData = Object.assign(reactiveData._v, normalData._v)
   const html = $interpolate(jqElement[0].innerHTML)(scope)
 
-  const vueInstance = new Vue(Object.assign({}, vueHooks, config, {
-    el: jqElement[0],
-    data: reactiveData,
-    render (h) {
-      return <Component {...{ directives, props: allData, on }}>
-      { html ? <span domPropsInnerHTML={ html }/> : '' }</Component>
+  const mountReplace = (component, props, target) => {
+    const fragment = document.createDocumentFragment();
+    const app = createApp(component, props);
+    app.mount(fragment);
+    target.parentNode.replaceChild(fragment, target);
+    return app;
+  }
+
+  Object.assign(reactiveData, normalData, directives, on);
+
+  const vueInstance = mountReplace(Object.assign({}, vueHooks, config, {
+    render () {
+      return h(Component, reactiveData);
     }
-  }))
+  }), {}, jqElement[0]);
 
   scope.$on('$destroy', () => {
-    vueInstance.$destroy()
-    if (vueInstance.$el.parentNode) {
-      vueInstance.$el.parentNode.removeChild(vueInstance.$el)
-    }
+    vueInstance.unmount();
   })
 }

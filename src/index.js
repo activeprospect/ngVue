@@ -50,6 +50,7 @@ function ngVueComponentDirective ($injector) {
     restrict: 'E',
     link (scope, elem, attrs) {
       const componentName = attrs.name
+      delete attrs.name
       ngVueLinker(componentName, elem, attrs, scope, $injector)
     }
   }

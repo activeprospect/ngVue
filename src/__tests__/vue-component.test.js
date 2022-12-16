@@ -1,5 +1,6 @@
 import angular from 'angular'
 import Vue from 'vue'
+import { reactive } from 'vue'
 
 import ngHtmlCompiler from './utils/ngHtmlCompiler'
 
@@ -41,14 +42,14 @@ describe('vue-component', () => {
       expect(elem[0].innerHTML).toBe('<span>Hello John Doe</span>')
     })
 
-    it('should render a vue component with v-bind-name properties from scope', () => {
+    it('should render a vue component with :name properties from scope', () => {
       const scope = $rootScope.$new()
       scope.person = { firstName: 'John', lastName: 'Doe' }
       const elem = compileHTML(
         `<vue-component
           name="HelloComponent"
-          v-bind-first-name="person.firstName"
-          v-bind-last-name="person.lastName" />`,
+          :first-name="person.firstName"
+          :last-name="person.lastName" />`,
         scope
       )
       expect(elem[0].innerHTML).toBe('<span>Hello John Doe</span>')
@@ -63,12 +64,12 @@ describe('vue-component', () => {
 
     it('should re-render the vue component when v-bind value changes', (done) => {
       const scope = $rootScope.$new()
-      scope.person = { firstName: 'John', lastName: 'Doe' }
+      scope.person = reactive({ firstName: 'John', lastName: 'Doe' })
       const elem = compileHTML('<vue-component name="HelloComponent" v-bind="person" />', scope)
 
       scope.person.firstName = 'Jane'
       scope.person.lastName = 'Smith'
-      Vue.nextTick(() => {
+      process.nextTick(() => {
         expect(elem[0].innerHTML).toBe('<span>Hello Jane Smith</span>')
         done()
       })
@@ -81,71 +82,71 @@ describe('vue-component', () => {
 
       scope.person = { firstName: 'Jane', lastName: 'Smith' }
       scope.$digest()
-      Vue.nextTick(() => {
+      process.nextTick(() => {
         expect(elem[0].innerHTML).toBe('<span>Hello Jane Smith</span>')
         done()
       })
     })
 
-    it('should re-render the vue component when v-bind-name value change', (done) => {
+    it('should re-render the vue component when :name value change', (done) => {
       const scope = $rootScope.$new()
       scope.person = { firstName: 'John', lastName: 'Doe' }
       const elem = compileHTML(
         `<vue-component
           name="HelloComponent"
-          v-bind-first-name="person.firstName"
-          v-bind-last-name="person.lastName" />`,
+          :first-name="person.firstName"
+          :last-name="person.lastName" />`,
         scope
       )
 
       scope.person.firstName = 'Jane'
       scope.person.lastName = 'Smith'
       scope.$digest()
-      Vue.nextTick(() => {
+      process.nextTick(() => {
         expect(elem[0].innerHTML).toBe('<span>Hello Jane Smith</span>')
         done()
       })
     })
 
-    it('should re-render the vue component when v-bind-name reference change', (done) => {
+    it('should re-render the vue component when :name reference change', (done) => {
       const scope = $rootScope.$new()
       scope.person = { firstName: 'John', lastName: 'Doe' }
       const elem = compileHTML(
         `<vue-component
           name="HelloComponent"
-          v-bind-first-name="person.firstName"
-          v-bind-last-name="person.lastName" />`,
+          :first-name="person.firstName"
+          :last-name="person.lastName" />`,
         scope
       )
 
       scope.person = { firstName: 'Jane', lastName: 'Smith' }
       scope.$digest()
-      Vue.nextTick(() => {
+      process.nextTick(() => {
         expect(elem[0].innerHTML).toBe('<span>Hello Jane Smith</span>')
         done()
       })
     })
 
-    it('should re-render the vue component when v-bind-name is an array and its items change', (done) => {
+    it('should re-render the vue component when :name is an array and its items change', (done) => {
       const scope = $rootScope.$new()
-      scope.persons = [
+      scope.persons = reactive([
         { firstName: 'John', lastName: 'Doe' },
         { firstName: 'Jane', lastName: 'Doe' }
-      ]
+      ])
       const elem = compileHTML(
         `<vue-component
           name="PersonsComponent"
-          v-bind-persons="persons" />`,
+          :persons="persons" />`,
         scope
       )
 
       // use Array.prototype.splice
       scope.persons.splice(0, 1, { firstName: 'John', lastName: 'Smith' })
       // use Vue.set
-      Vue.set(scope.persons, 1, { firstName: 'Jane', lastName: 'Smith' })
+      scope.persons[1] = { firstName: 'Jane', lastName: 'Smith' }
 
       scope.$digest()
-      Vue.nextTick(() => {
+      process.nextTick(() => {
         expect(elem[0].innerHTML).toBe('<ul><li>John Smith</li><li>Jane Smith</li></ul>')
         done()
       })
