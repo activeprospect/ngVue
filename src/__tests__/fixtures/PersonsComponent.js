@@ -8,7 +8,7 @@ export default defineComponent({
       default: () => []
     }
   },
-  render (c) {
+  render () {
     return h('ul',
       this.persons.map(p => {
         return h('li', `${p.firstName} ${p.lastName}`);
