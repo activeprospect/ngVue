@@ -161,4 +161,18 @@ describe('create-vue-component', () => {
       expect(elem[0]).toMatchSnapshot()
     })
   })
+
+  describe('events', () => {
+    beforeEach(() => {
+      $compileProvider.directive('hello', createVueComponent => createVueComponent(HelloComponent))
+    })
+
+    it('does not show the events in rendering', () => {
+      const scope = $rootScope.$new()
+      scope.onHandle = function() {};
+      const elem = compileHTML('<hello @handle="onHandle" />', scope)
+      expect(elem[0].innerHTML).toBe('<span>Hello  </span>');
+    });
+
+  });
 })

@@ -30,7 +30,7 @@ export function ngVueLinker (componentName, jqElement, elAttributes, scope, $inj
   const on = {}
   if (dataExprsMap.events && Object.keys(dataExprsMap.events).length) {
     Object.keys(dataExprsMap.events).forEach(e => {
-      on[e] = scope.$eval(dataExprsMap.events[e])
+      on['on' + e[0].toUpperCase() + e.slice(1)] = scope.$eval(dataExprsMap.events[e])
     })
   }
 
