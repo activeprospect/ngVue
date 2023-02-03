@@ -48,7 +48,11 @@ export function ngVueLinker (componentName, jqElement, elAttributes, scope, $inj
 
   const vueInstance = mountReplace(Object.assign({}, vueHooks, config, {
     render () {
-      return h(Component, reactiveData);
+      return h(Component, reactiveData, {
+        default() {
+          return html;
+        }
+      });
     }
   }), {}, jqElement[0]);
 
